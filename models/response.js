@@ -1,6 +1,12 @@
-module.exports.responseModel = { 
-    "respCode" : "",
-    "respDesc" : "",
-    "namespace" : "",
-    "data" : {},
+module.exports.responseModel = {
+  respCode: "",
+  respDesc: "",
+  namespace: "",
+  data: {},
 };
+
+
+
+
+
+
