@@ -15,9 +15,14 @@ router.post(
   restaurantController.placeDetail
 );
 
-router.get(
+router.post(
   "/getPhotoRefernce",
   inputValidate(["photo_code", "maxwidth"]),
   restaurantController.placePhotoreFerence
+);
+
+router.get(
+  "/getcontentProminence",
+  restaurantController.getcontentProminence
 );
 module.exports = router;

@@ -14,7 +14,7 @@ module.exports.textSearch = (keyword) => {
         key: config.API_KEY,
         query: `${keyword}+ร้านอาหาร`,
         language: "th",
-        opennow: true,
+
         rankby: "prominence",
       },
     };
@@ -37,9 +37,9 @@ module.exports.textSearch = (keyword) => {
             status: result.opening_hours,
             name: result.name,
             place_id: result.place_id,
-            rating: result.rating ? result.rating : "ยังไม่มีการให้คะแนน",
+            rating: result.rating ? result.rating : 0,
             address: result.formatted_address,
-            //ดักกรณีที่ไม่ม่รูปด้วย
+            geometry:result.geometry,
             photo: result.photos ? result.photos[0].photo_reference : [],
           };
         });

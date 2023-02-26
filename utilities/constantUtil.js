@@ -5,6 +5,7 @@ module.exports.ConstantUtil = {
     YES_FLAG : "Y",
     U_FLAG : "U",
     NO_FLAG : "N",
+    BKK_WORDING:"BANGKOK"
 
 };
 

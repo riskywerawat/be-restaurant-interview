@@ -11,6 +11,7 @@ const {ConstantRespCodeUtil} = require('../utilities/constantRespCodeUtil');
 let {textSearch, placePhotoreFerence, placeDetail} = require('../services/placeService');
 let redisService = require('../services/redisService');
 const respModel = _.clone(model);
+
 respModel.namespace = ConstantUtil.PROJECT_NAME_SPACE;
 respModel.respCode = ConstantRespCodeUtil.INTERNAL_SYSTEM_EXCEPTION_ENGINE_RESP_CODE[0]
 respModel.respDesc = ConstantRespCodeUtil.INTERNAL_SYSTEM_EXCEPTION_ENGINE_RESP_CODE[1]
@@ -60,7 +61,7 @@ module.exports.textSearch = async (req, res) => {
         let getRedisplacePhoto = await redisService.getRedis(req.body.photo_code);
             if(getRedisplacePhoto && !_.isEmpty(getRedisplacePhoto.data)){
                 console.log(`################ found redis  placePhotoreFerence photo_code ^ ################` );
-                respModel.data = getRedisData.data;
+                respModel.data = getRedisplacePhoto.data;
             }else{
                 //! set redis ด้วย photo_code      
                 let resultApiPlacePhoto = await placePhotoreFerence(req.body.photo_code,req.body.maxwidth);
@@ -104,6 +105,50 @@ module.exports.textSearch = async (req, res) => {
                 }
             }
       
+        respModel.respCode = ConstantRespCodeUtil.SUCCESS_RESP_CODE[0];
+        respModel.respDesc = ConstantRespCodeUtil.SUCCESS_RESP_CODE[1];
+       res.send(respModel).status(200);
+    }catch (err){
+        console.log(`################ error exception ->>:: ${err} ################` );
+
+        res.send(respModel).status(400);
+    }   
+
+
+  };
+  module.exports.getcontentProminence = async (req, res) => {
+    console.log(`################ request : ${JSON.stringify(req.body)} ################` );
+    try {
+         //! เช็ค redis ด้วย textSearch จาก custumer     
+        let getRedisData = await redisService.getRedis(ConstantUtil.BKK_WORDING);
+        console.log(`################ getRedisData result : ${JSON.stringify(getRedisData)} ################` );
+        console.log(`################ getRedisData found : ${JSON.stringify(getRedisData?.data)} ################` );
+    
+            if(getRedisData && !_.isEmpty(getRedisData.data)){
+                console.log(`################ found redis ^ ################` );
+                respModel.data = getRedisData.data;
+            }else{
+                console.log(`################ not found redis ^ ################` );
+                let resultApiPlace = await textSearch(ConstantUtil.BKK_WORDING);
+            
+                if(resultApiPlace && !_.isEmpty(resultApiPlace?.data)){
+                     //! get redis ด้วย textSearch จาก custumer  
+                     resultApiPlace.data.slice(0,5);
+                     for (let index = 0; index < resultApiPlace.data.length; index++) {
+                        const element = resultApiPlace.data[index];
+                        let {data} = await placePhotoreFerence(resultApiPlace.data[index].photo,500);
+                        resultApiPlace.data[index].photo = data
+                     }
+                     
+                     console.log(resultApiPlace);
+                    let resultSetRedis = await redisService.setDataWithExpireTimeBySecond(ConstantUtil.BKK_WORDING,resultApiPlace.data,config.EXIPRED_REDIS)
+                    console.log(`################ redis has been set ^ ################` );
+                    console.log(`################ getRedisData found : ${JSON.stringify(resultSetRedis)} ################` );
+                    
+                    respModel.data = resultApiPlace;
+                }
+            }
+    
         respModel.respCode = ConstantRespCodeUtil.SUCCESS_RESP_CODE[0];
         respModel.respDesc = ConstantRespCodeUtil.SUCCESS_RESP_CODE[1];
        res.send(respModel).status(200);
