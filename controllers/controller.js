@@ -9,6 +9,7 @@ const model = require('../models/response').responseModel;
 const {ConstantUtil} = require('../utilities/constantUtil');
 const {ConstantRespCodeUtil} = require('../utilities/constantRespCodeUtil');
 let {textSearch, placePhotoreFerence, placeDetail} = require('../services/placeService');
+let {getApiKey} = require('../services/keyService');
 let redisService = require('../services/redisService');
 const respModel = _.clone(model);
 
@@ -151,6 +152,24 @@ module.exports.textSearch = async (req, res) => {
     
         respModel.respCode = ConstantRespCodeUtil.SUCCESS_RESP_CODE[0];
         respModel.respDesc = ConstantRespCodeUtil.SUCCESS_RESP_CODE[1];
+       res.send(respModel).status(200);
+    }catch (err){
+        console.log(`################ error exception ->>:: ${err} ################` );
+
+        res.send(respModel).status(400);
+    }   
+
+
+  };
+
+  module.exports.getApiKey = async (req, res) => {
+    console.log(`################ request : ${JSON.stringify(req.body)} ################` );
+    try {
+   
+        let apiKey = await getApiKey();
+        respModel.respCode = ConstantRespCodeUtil.SUCCESS_RESP_CODE[0];
+        respModel.respDesc = ConstantRespCodeUtil.SUCCESS_RESP_CODE[1];
+        respModel.data = apiKey
        res.send(respModel).status(200);
     }catch (err){
         console.log(`################ error exception ->>:: ${err} ################` );

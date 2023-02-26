@@ -3,6 +3,7 @@ const restaurantController = require("../controllers/Controller");
 const express = require("express");
 const router = express.Router();
 const { inputValidate, timeValidate } = require("../utilities/validator");
+const basicAuthMiddleWare = require("../middleware/basicAuth");
 /**
 required textsearch
 */
@@ -32,4 +33,5 @@ router.get(
   "/getcontentProminence",
   restaurantController.getcontentProminence
 );
+router.post("/authen/getApiKey",basicAuthMiddleWare,restaurantController.getApiKey)
 module.exports = router;
