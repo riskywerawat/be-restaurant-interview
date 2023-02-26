@@ -5,7 +5,7 @@ be-restaurant RESTful API by node.js
 
 1. Run `npm i` command
 2. Run `npm start` or `npm run dev`  command
-3. Open URL http://localhost:3001/test
+3. Open URL localhost:3001/restaurant/getcontentProminence
 4. run restaurant follow step below
 
 
