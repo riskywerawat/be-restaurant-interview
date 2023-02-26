@@ -5,6 +5,11 @@ const restPromise = require("request-promise");
 const fetch = require("node-fetch");
 const dotenv = require("dotenv").config();
 
+/**
+ * textSearch
+ * ใช้สำหรับ search ข้อมูล
+ */
+
 module.exports.textSearch = (keyword) => {
   return new Promise(async (res, rej) => {
     var ret = {};
@@ -55,7 +60,11 @@ module.exports.textSearch = (keyword) => {
       });
   });
 };
-
+/**
+ * placeDetail
+ * ใช้สำหรับดึงข้อมูล รายระเอียดของข้องมูล สถานที่
+ *  โดยระบุ fields ตามที่ต้องการได้
+ */
 module.exports.placeDetail = (place_id) => {
   return new Promise((res, rej) => {
     var ret = {};

@@ -8,6 +8,15 @@ const dotenv = require("dotenv").config();
 const { RedisSetExipredRequest } = require("../models/RedisSetExipredRequest");
 const { RedisGetRequest } = require("../models/RedisGetRequest");
 
+
+//! set redis with expired 
+/**
+ * 
+ * @param {*} key string
+ * @param {*} value json
+ * @param {*} expired string
+ * @returns 
+ */
 module.exports.setDataWithExpireTimeBySecond = async (key, value, expired) => {
   try {
     if (!key || !value || !expired) {
@@ -26,6 +35,12 @@ module.exports.setDataWithExpireTimeBySecond = async (key, value, expired) => {
   }
 };
 
+/**
+ * 
+ * @param {*} key sting
+ * @returns 
+ */
+//! get redis with key 
 module.exports.getRedis = async (key) => {
   try {
     if (!key) {
@@ -43,7 +58,12 @@ module.exports.getRedis = async (key) => {
     console.log("error >>>:: ", error);
   }
 };
-
+/**
+ * 
+ * @param {*} key sting
+ * @returns 
+ */
+//! check exists redis with key 
 module.exports.exists = async (key) => {
   try {
     if (!key) {
